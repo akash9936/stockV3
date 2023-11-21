@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "test": "npm run test",
-    "start": "node nseIndia.js",
+    "start": "node ./src/nseIndia.js",
     "devScript1": "node stock.js"
   },
   "author": "",

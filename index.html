@@ -9,5 +9,32 @@
 <body>
     <h1>Data from Google Sheets:</h1>
     <div id="data-container"></div>
+
+    <!-- Add a button to trigger data analysis -->
+    <button id="analyzeButton">Analyze Data</button>
+
+    <script>
+        async function analyzeData() {
+            try {
+                const response = await fetch('http://localhost:3001/analyzeData', { method: 'POST' });
+                const result = await response.json();
+    console.log("Data is ----->"+result)
+                const resultContainer = document.getElementById('data-container');
+    
+                // Check if symbolsForBuyingStock exists in the response
+                if (result.symbolsForBuyingStock) {
+                    const symbolsList = result.symbolsForBuyingStock.join(', ');
+                    resultContainer.innerHTML = `<p>Symbols for buying Stock: ${symbolsList}</p>`;
+                } else {
+                    resultContainer.innerHTML = `<p>No symbols for buying Stock found.</p>`;
+                }
+            } catch (error) {
+                console.error('Error analyzing data:', error.message);
+            }
+        }
+    
+        const analyzeButton = document.getElementById('analyzeButton');
+        analyzeButton.addEventListener('click', analyzeData);
+    </script>
 </body>
 </html>

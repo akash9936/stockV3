@@ -43,7 +43,7 @@ const mongooseOptions = {
             } catch (error) {
                 console.error('Error fetching or inserting data:', error.message);
             }
-        }, 60000);
+        }, 10000);
 
         // Set up the Express server
         app.use(cors());
