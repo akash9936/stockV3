@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "test": "npm run test",
+    "test": "npm run testa",
     "start": "npm-run-all --parallel prodScript1 prodScript2",
     "prodScript1": "NODE_ENV=production node ./src/dataAnalysis.js",
     "prodScript2": "NODE_ENV=production node ./src/nseIndia.js"
