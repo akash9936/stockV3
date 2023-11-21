@@ -32,7 +32,7 @@ db.once('open', async () => {
 
 app.post('/analyzeData', async (req, res) => {
     try {
-        const totalData=20;
+        const totalData=30;
         const sliceData=totalData/2;
         // Retrieve the data from MongoDB
         const dataFromMongo = await NSE50Data.find().sort({ timestamp: -1 }).limit(totalData).lean();
