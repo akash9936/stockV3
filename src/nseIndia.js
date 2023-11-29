@@ -1,13 +1,13 @@
 // nseIndia.js
 const express = require('express');
 const cors = require('cors');
-const fetchData = require('./growwStock');
+const fetchData = require('./getNSEIndiaData');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const NSE50Data = require('./models/NSE50Data');
 const app = express();
 dotenv.config();
-const port = 3000;
+const port = 4000;
 const mongooseOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -2,7 +2,7 @@ const express = require('express');
 const { google } = require('googleapis');
 const credentials = require('./sheetCredV2.json');
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.get('/getStockData', async (req, res) => {
     try {

@@ -5,9 +5,9 @@
   "scripts": {
     "build": "webpack --mode production",
     "test": "npm run test",
-    "start": "npm-run-all --parallel prodScript1 prodScript2",
+    "start": "npm-run-all --parallel prodScript1",
     "prodScript1": "NODE_ENV=production node ./src/dataAnalysis.js",
-    "prodScript2": "NODE_ENV=production node ./src/nseIndia.js"    
+    "prodScript2": "NODE_ENV=production node ./src/nseIndia.js"
   },
   "author": "",
   "license": "ISC",

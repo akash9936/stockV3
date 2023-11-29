@@ -4,27 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Web Page</title>
+    <link rel="stylesheet" href="./src/styles.css">
     <script src="main.js" defer></script>
 </head>
 <body>
-    <h1>Data from Google Sheets:</h1>
+    <h1>Trying to get insider candle, dekh le ab kya karna h:</h1>
     <div id="data-container"></div>
 
     <!-- Add a button to trigger data analysis -->
     <button id="analyzeButton">Analyze Data</button>
+    <footer>
+        <p>&copy; 2023 Akash Singh. All rights reserved.</p>
+    </footer>
 
     <script>
         async function analyzeData() {
             try {
-                const response = await fetch('http://localhost:3001/analyzeData', { method: 'POST' });
+                const response = await fetch('http://localhost:3002/analyzeData', { method: 'POST' });
                 const result = await response.json();
-    console.log("Data is ----->"+result)
+
                 const resultContainer = document.getElementById('data-container');
-    
+
                 // Check if symbolsForBuyingStock exists in the response
                 if (result.symbolsForBuyingStock) {
-                    const symbolsList = result.symbolsForBuyingStock.join(', ');
-                    resultContainer.innerHTML = `<p>Symbols for buying Stock: ${symbolsList}</p>`;
+                    const symbolsList = result.symbolsForBuyingStock.map(symbolData => `
+                        <p>Symbol: ${symbolData.symbol}</p>
+                        <p>Max Last Price (Last 15): ${symbolData.maxLastPriceLast5.value} at ${symbolData.maxLastPriceLast5.timestamp}</p>
+                        <p>Min Last Price (Last 15): ${symbolData.minLastPriceLast5.value} at ${symbolData.minLastPriceLast5.timestamp}</p>
+                        <p>Max Last Price (Previous 15): ${symbolData.maxLastPricePrevious5.value} at ${symbolData.maxLastPricePrevious5.timestamp}</p>
+                        <p>Min Last Price (Previous 15): ${symbolData.minLastPricePrevious5.value} at ${symbolData.minLastPricePrevious5.timestamp}</p>
+                    `).join('');
+
+                    resultContainer.innerHTML = `<div>${symbolsList}</div>`;
                 } else {
                     resultContainer.innerHTML = `<p>No symbols for buying Stock found.</p>`;
                 }
@@ -32,7 +43,7 @@
                 console.error('Error analyzing data:', error.message);
             }
         }
-    
+
         const analyzeButton = document.getElementById('analyzeButton');
         analyzeButton.addEventListener('click', analyzeData);
     </script>
