@@ -56,7 +56,7 @@ app.post('/analyzeData', async (req, res) => {
         
         
 
-        const dataFromMongo = await NSE50Data.find().sort({ timestamp: -1 }).limit(totalData).lean();
+        const dataFromMongo = await NSE50Data.find().sort({ _id: -1 }).limit(totalData).lean();
 
         if (dataFromMongo.length > 0) {
             // Extract the last 5 and previous 5 records
