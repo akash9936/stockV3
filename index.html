@@ -25,14 +25,12 @@
 
     <label for="toTime">To Time:</label>
     <input type="time" id="toTime">
-
+    <button id="analyzeButton">Analyze Data</button>
     <div id="data-container"></div>
     <div id="record-sizes"></div>
     <!-- Add a button to trigger data analysis -->
-    <button id="analyzeButton">Analyze Data</button>
-    <footer>
-        <p>&copy; 2023 Akash Singh. All rights reserved.</p>
-    </footer>
+   
+    
 
     <script>
         function getCurrentDate() {
@@ -85,8 +83,8 @@
                     recordSizesContainer.innerHTML = `
                         <p>Size of last data is: ${result.lastRecordsSize}</p>
                         <p>Size of Previous data is: ${result.previousRecordsSize}</p>
-                        <p>filter date time last data is from ${result.symbolsForBuyingStock[0].lastFromTime} To ${result.symbolsForBuyingStock[0].lastToTime}</p>
-                        <p>filter date time Previous data is from ${result.symbolsForBuyingStock[0].PreviousFromTime} To ${result.symbolsForBuyingStock[0].PreviousToTime}</p>
+                        <p>filter date and time last data is from ${result.symbolsForBuyingStock[0].lastFromTime} To ${result.symbolsForBuyingStock[0].lastToTime}</p>
+                        <p>filter date and time Previous data is from ${result.symbolsForBuyingStock[0].PreviousFromTime} To ${result.symbolsForBuyingStock[0].PreviousToTime}</p>
                     `;
 
                     // Display detailed information for each symbol
@@ -111,7 +109,9 @@
         const analyzeButton = document.getElementById('analyzeButton');
         analyzeButton.addEventListener('click', analyzeData);
     </script>
-
+<footer>
+    <p>&copy; 2023 Akash Singh. All rights reserved.</p>
+</footer>
 </body>
 
 </html>
