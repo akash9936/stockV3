@@ -43,7 +43,7 @@ const mongooseOptions = {
                         await NSE50Data.collection.insertOne(simplifiedData);
                         console.log('Data inserted into MongoDB.');
                     } else {
-                        console.error('Error: Data is not available.');
+                        console.error('Error: Data is  not available.');
                     }
                 }
             }
