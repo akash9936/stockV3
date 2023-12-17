@@ -41,6 +41,7 @@ function fetchData() {
                         fetchData().then(resolve).catch(reject); // Retry after 1 second
                     }, 1000);
                 } else {
+                    console.log(`[${new Date().toISOString()}] error accrued`);
                     reject(error);
                 }
             });
