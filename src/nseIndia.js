@@ -24,7 +24,7 @@ const mongooseOptions = {
         // Set up the interval after the connection is established
         setInterval(async () => {
             try {
-                if (!isInTradingHours()) {
+                if (isInTradingHours()) {
                     console.log("Market is not open")
                 }
                 else {
