@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "functions": {
+      "api/fetchData.js": {
+        "runtime": "nodejs16.x",
+        "memory": 1024,
+        "maxDuration": 300000 // Set this according to your needs
+      }
+    }
+  }
+  
