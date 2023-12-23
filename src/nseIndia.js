@@ -24,13 +24,13 @@ const mongooseOptions = {
         // Set up the interval after the connection is established
         setInterval(async () => {
             try {
-                if (isInTradingHours()) {
+                if (!isInTradingHours()) {
                     console.log("Market is not open")
                 }
                 else {
                     console.log("Trying to fetch data")
                     const data = await fetchData();
-                    console.log("Data is fetched")
+                 //   console.log("Data is fetched")
                     if (data) {
                         const simplifiedData = {
                             timestamp: data.timestamp,
@@ -39,9 +39,9 @@ const mongooseOptions = {
                                 lastPrice: stock.lastPrice
                             }))
                         };
-                        console.log('Data before inserted into MongoDB.');
+                   //     console.log('Data before inserted into MongoDB.');
                         await NSE50Data.collection.insertOne(simplifiedData);
-                        console.log('Data inserted into MongoDB.');
+                    //    console.log('Data inserted into MongoDB.');
                     } else {
                         console.error('Error: Data is  not available.');
                     }
