@@ -50,7 +50,7 @@ const mongooseOptions = {
             catch (error) {
                 console.error('Error fetching or inserting data:', error.message);
             }
-        }, 30000);
+        }, 60000);
 
         // Set up the Express server
         app.use(cors());
@@ -109,7 +109,7 @@ function fetchData() {
                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
         
         }
-           ,timeout: 60000,
+           ,timeout: 30000,
         };
         try {
             await axios.request(config)
@@ -124,7 +124,7 @@ function fetchData() {
                         console.log(`[${new Date().toISOString()}] Received 401 Unauthorized error. Retrying after 1 second...`);
                         setTimeout(() => {
                             fetchData().then(resolve).catch(reject); // Retry after 1 second
-                        }, 1000);
+                        }, 5000);
                     } else {
                         console.log(`[${new Date().toISOString()}] error accrued`);
                         reject(error);
