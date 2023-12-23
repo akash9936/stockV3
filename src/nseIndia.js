@@ -88,6 +88,7 @@ let count = 1;
 
 function fetchData() {
     return new Promise(async (resolve, reject) => {
+
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
@@ -106,28 +107,35 @@ function fetchData() {
                 'sec-fetch-mode': 'cors',
                 'sec-fetch-site': 'same-origin',
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-            }
+            },
+            timeout: 60000,
         };
+        try {
+            await axios.request(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response.data));
+                    resolve(response.data);  // Resolve with the data
+                    console.log("-----------------------------------------------------" + count);
+                    count++;
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status !== 200) {
+                        console.log(`[${new Date().toISOString()}] Received 401 Unauthorized error. Retrying after 1 second...`);
+                        setTimeout(() => {
+                            fetchData().then(resolve).catch(reject); // Retry after 1 second
+                        }, 1000);
+                    } else {
+                        console.log(`[${new Date().toISOString()}] error accrued`);
+                        reject(error);
+                    }
+                });
+        }
+        catch (ex) {
+            console.log("Error occured while fetching data" + ex);
 
-       await axios.request(config)
-            .then((response) => {
-                console.log(JSON.stringify(response.data));
-                resolve(response.data);  // Resolve with the data
-                console.log("-----------------------------------------------------" + count);
-                count++;
-            })
-            .catch((error) => {
-                if (error.response && error.response.status !== 200) {
-                    console.log(`[${new Date().toISOString()}] Received 401 Unauthorized error. Retrying after 1 second...`);
-                    setTimeout(() => {
-                        fetchData().then(resolve).catch(reject); // Retry after 1 second
-                    }, 1000);
-                } else {
-                    console.log(`[${new Date().toISOString()}] error accrued`);
-                    reject(error);
-                }
-            });
+        }
     });
+
 }
 
-module.exports = fetchData;
+//module.exports = fetchData;
