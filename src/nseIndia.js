@@ -77,6 +77,17 @@ const isInTradingHours = () => {
     return dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 9 && hours < 15 && (hours !== 15 || minutes <= 35);
 };
 
+//get he user agent
+
+async function getUserAgent() {
+    try {
+        const response = await axios.get('https://httpbin.org/headers');
+        const userAgent = response.data.headers['User-Agent'];
+        console.log('User Agent:', userAgent);
+    } catch (error) {
+        console.error('Error fetching user agent:', error.message);
+    }
+}
 
 
 //Below code call
@@ -85,7 +96,8 @@ const axios = require('axios');
 const tough = require('tough-cookie');
 const cookieJar = new tough.CookieJar();
 let count = 1;
-
+const userAgent= getUserAgent();
+console.log("User-agent is "+userAgent)
 function fetchData() {
     return new Promise(async (resolve, reject) => {
 
@@ -94,21 +106,22 @@ function fetchData() {
             maxBodyLength: Infinity,
             url: 'https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050',
             headers: {
-                'authority': 'www.nseindia.com',
-                'accept': '*/*',
-                'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-                'cookie': cookieJar.getCookieStringSync('https://www.nseindia.com'),
-                'dnt': '1',
-                'referer': 'https://www.nseindia.com/market-data/live-equity-market',
-                'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': '"macOS"',
-                'sec-fetch-dest': 'empty',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-site': 'same-origin',
-                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-            },
-            timeout: 60000,
+         //       'authority': 'www.nseindia.com',
+          //      'accept': '*/*',
+        //        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+                'Cookie': cookieJar.getCookieStringSync('https://www.nseindia.com'),
+            //     'dnt': '1',
+            //      'referer': 'https://www.nseindia.com/market-data/live-equity-market',
+            //     'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+            //     'sec-ch-ua-mobile': '?0',
+            //     'sec-ch-ua-platform': '"macOS"',
+            //     'sec-fetch-dest': 'empty',
+            //     'sec-fetch-mode': 'cors',
+            //   //  'sec-fetch-site': 'same-origin',
+            //   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+        'user-agent':userAgent   
+        }
+           ,timeout: 60000,
         };
         try {
             await axios.request(config)
