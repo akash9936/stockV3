@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "test": "npm run test",
-    "start": "cross-env NODE_ENV=production npm-run-all --parallel prodScript1 prodScript2",
+    "start": "cross-env NODE_ENV=production npm-run-all --parallel prodScript2",
     "prodScript1": "node ./src/dataAnalysis.js",
     "prodScript2": "node ./src/nseIndia.js",
     "lint": "eslint ."
