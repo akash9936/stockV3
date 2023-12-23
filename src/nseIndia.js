@@ -79,16 +79,6 @@ const isInTradingHours = () => {
 
 //get he user agent
 
-async function getUserAgent() {
-    try {
-        const response = await axios.get('https://httpbin.org/headers');
-        const userAgent = response.data.headers['User-Agent'];
-        console.log('User Agent:', userAgent);
-    } catch (error) {
-        console.error('Error fetching user agent:', error.message);
-    }
-}
-
 
 //Below code call
 // growwStock.js
@@ -96,8 +86,6 @@ const axios = require('axios');
 const tough = require('tough-cookie');
 const cookieJar = new tough.CookieJar();
 let count = 1;
-const userAgent= getUserAgent();
-console.log("User-agent is "+userAgent)
 function fetchData() {
     return new Promise(async (resolve, reject) => {
 
@@ -118,8 +106,8 @@ function fetchData() {
             //     'sec-fetch-dest': 'empty',
             //     'sec-fetch-mode': 'cors',
             //   //  'sec-fetch-site': 'same-origin',
-            //   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-        'user-agent':userAgent   
+               'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+        
         }
            ,timeout: 60000,
         };
