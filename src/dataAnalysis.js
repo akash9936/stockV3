@@ -126,6 +126,7 @@ app.post('/analyzeData', async (req, res) => {
         });
 
         console.log('Max and Min Last Prices (Last ):');
+        
         Object.keys(symbolMinMaxLast).forEach((symbol) => {
             console.log(`Symbol: ${symbol}`);
             console.log(`Max Last Price: ${symbolMinMaxLast[symbol].max} (Timestamp: ${symbolMinMaxLast[symbol].maxTimestamp})`);
