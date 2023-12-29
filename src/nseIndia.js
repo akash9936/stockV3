@@ -24,7 +24,7 @@ const mongooseOptions = {
         // Set up the interval after the connection is established
         setInterval(async () => {
             try {
-                if (!isInTradingHours()) {
+                if (isInTradingHours()) {
                     console.log("Market is not open")
                 }
                 else {
@@ -68,11 +68,16 @@ const mongooseOptions = {
 })();
 
 const isInTradingHours = () => {
-    const now = new Date();
-    const dayOfWeek = now.getDay(); // Sunday is 0, Monday is 1, ..., Saturday is 6
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
+        const now = new Date();
+    const istOptions = { timeZone: 'Asia/Kolkata' }; // 'Asia/Kolkata' is the time zone for IST
 
+    const dayOfWeek = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Kolkata' }).format(now);
+    const hours = now.toLocaleString('en-US', { hour: 'numeric', hour12: false, ...istOptions });
+    const minutes = now.toLocaleString('en-US', { minute: 'numeric', ...istOptions });
+    
+console.log('IST Day of Week:', dayOfWeek);
+console.log('IST Hours:', hours);
+console.log('IST Minutes:', minutes);
     // Check if it's a weekday (Monday to Friday) and within trading hours
     return dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 9 && hours < 15 && (hours !== 15 || minutes <= 35);
 };
