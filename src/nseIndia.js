@@ -24,13 +24,13 @@ const mongooseOptions = {
         // Set up the interval after the connection is established
         setInterval(async () => {
             try {
-                if (isInTradingHours()) {
+                if (!isInTradingHours()) {
                     console.log("Market is not open")
                 }
                 else {
                     console.log("Trying to fetch data")
                     const data = await fetchData();
-                 //   console.log("Data is fetched")
+                    //   console.log("Data is fetched")
                     if (data) {
                         const simplifiedData = {
                             timestamp: data.timestamp,
@@ -39,9 +39,9 @@ const mongooseOptions = {
                                 lastPrice: stock.lastPrice
                             }))
                         };
-                   //     console.log('Data before inserted into MongoDB.');
+                        //     console.log('Data before inserted into MongoDB.');
                         await NSE50Data.collection.insertOne(simplifiedData);
-                    //    console.log('Data inserted into MongoDB.');
+                        //    console.log('Data inserted into MongoDB.');
                     } else {
                         console.error('Error: Data is  not available.');
                     }
@@ -67,19 +67,22 @@ const mongooseOptions = {
     }
 })();
 
-const isInTradingHours = () => {
-        const now = new Date();
+let isInTradingHours = () => {
+    let now = new Date();
     const istOptions = { timeZone: 'Asia/Kolkata' }; // 'Asia/Kolkata' is the time zone for IST
 
-    const dayOfWeek = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Kolkata' }).format(now);
-    const hours = now.toLocaleString('en-US', { hour: 'numeric', hour12: false, ...istOptions });
-    const minutes = now.toLocaleString('en-US', { minute: 'numeric', ...istOptions });
-    
-console.log('IST Day of Week:', dayOfWeek);
-console.log('IST Hours:', hours);
-console.log('IST Minutes:', minutes);
+    let dayOfWeek = now.getUTCDay();
+    let hours = parseInt(now.toLocaleString('en-US', { hour: 'numeric', hour12: false, ...istOptions }));
+    let minutes = parseInt(now.toLocaleString('en-US', { minute: 'numeric', ...istOptions }));
+
+    console.log('IST Day of Week:', dayOfWeek);
+    console.log('IST Hours:', hours);
+    console.log('IST Minutes:', minutes);
     // Check if it's a weekday (Monday to Friday) and within trading hours
-    return dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 9 && hours < 15 && (hours !== 15 || minutes <= 35);
+    let isAllowed = (dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 9 && hours <= 15)
+    //&& (hours !== 15 || minutes <= 35));
+    console.log("isAllowed is " + isAllowed);
+    return isAllowed;
 };
 
 //get he user agent
@@ -99,29 +102,29 @@ function fetchData() {
             maxBodyLength: Infinity,
             url: 'https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050',
             headers: {
-         //       'authority': 'www.nseindia.com',
-          //      'accept': '*/*',
-        //        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+                //       'authority': 'www.nseindia.com',
+                //      'accept': '*/*',
+                //        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
                 'Cookie': cookieJar.getCookieStringSync('https://www.nseindia.com'),
-            //     'dnt': '1',
-            //      'referer': 'https://www.nseindia.com/market-data/live-equity-market',
-            //     'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
-            //     'sec-ch-ua-mobile': '?0',
-            //     'sec-ch-ua-platform': '"macOS"',
-            //     'sec-fetch-dest': 'empty',
-            //     'sec-fetch-mode': 'cors',
-            //   //  'sec-fetch-site': 'same-origin',
-               'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-        
-        }
-           ,timeout: 30000,
+                //     'dnt': '1',
+                //      'referer': 'https://www.nseindia.com/market-data/live-equity-market',
+                //     'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+                //     'sec-ch-ua-mobile': '?0',
+                //     'sec-ch-ua-platform': '"macOS"',
+                //     'sec-fetch-dest': 'empty',
+                //     'sec-fetch-mode': 'cors',
+                //   //  'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+
+            }
+            , timeout: 30000,
         };
         try {
             await axios.request(config)
                 .then((response) => {
-                    console.log(JSON.stringify(response.data));
+         //           console.log(JSON.stringify(response.data));
                     resolve(response.data);  // Resolve with the data
-                    console.log("-----------------------------------------------------" + count);
+                    console.log("Data Fetch count is-------------------------------------------------" + count);
                     count++;
                 })
                 .catch((error) => {
