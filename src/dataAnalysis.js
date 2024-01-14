@@ -160,7 +160,7 @@ app.post('/analyzeData', async (req, res) => {
         const halfTimes = moment(halfTime, format);
 
         const symbolsForBuyingStock = symbolsData
-            .filter((symbolData) => symbolData.minLastPriceLast.value < symbolData.minLastPricePrevious.value && symbolData.maxLastPriceLast.value < symbolData.maxLastPricePrevious.value)
+            .filter((symbolData) => symbolData.minLastPriceLast.value > symbolData.minLastPricePrevious.value && symbolData.maxLastPriceLast.value < symbolData.maxLastPricePrevious.value)
             .map((symbolData) => {
                 return {
                     symbol: symbolData.symbol,
