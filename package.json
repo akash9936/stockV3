@@ -4,10 +4,17 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
+<<<<<<< HEAD
     "test": "npm run test",
     "start": "npm-run-all --parallel prodScript1",
     "prodScript1": "node ./src/dataAnalysis.js",
     "prodScript2": "node ./src/nseIndia.js"
+=======
+    "test": "npm run testa",
+    "start": "npm-run-all --parallel prodScript1 prodScript2",
+    "prodScript1": "NODE_ENV=production node ./src/dataAnalysis.js",
+    "prodScript2": "NODE_ENV=production node ./src/nseIndia.js"
+>>>>>>> 63620442d4aecb3b9c355e9240e38cb28132368b
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+<<<<<<< HEAD
     "google-auth-library": "^9.2.0",
     "googleapis": "^128.0.0",
     "moment": "^2.29.4",
@@ -32,5 +40,10 @@
   },
   "keywords": [],
   "homepage": "https://bitbucket.org/privatev1/v1#readme",
+=======
+    "tough-cookie": "^4.1.3"
+  },
+  "keywords": [],
+>>>>>>> 63620442d4aecb3b9c355e9240e38cb28132368b
   "description": ""
 }
