@@ -5,7 +5,7 @@
   "scripts": {
   "build": "netlify-lambda build src",
   "start": "npm-run-all --parallel prodScript1",
-  "prodScript1": "netlify-lambda serve ./src/dataAnalysis.js",
+  "prodScript1": "netlify-lambda serve -c ./netlify-config.toml ./src",
   "prodScript2": "netlify-lambda serve ./src/nseIndia.js",
   "test": "npm run test"
   },
