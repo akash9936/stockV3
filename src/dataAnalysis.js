@@ -5,13 +5,15 @@ const dotenv = require('dotenv');
 const NSE50Data = require('./models/NSE50Data');
 const cors = require('cors');
 const moment = require('moment');
-
+const serverless = require('serverless-http');
 dotenv.config();
 
 const app = express();
-const port = 3002;
-app.use(cors());
-app.use(bodyParser.json());
+const router = express.Router();
+
+const port = process.env.PORT || 3002;
+router.use(cors());
+router.use(bodyParser.json());
 
 const mongooseOptions = {
     useNewUrlParser: true,
@@ -33,7 +35,11 @@ db.once('open', async () => {
 
 const format = 'DD-MMM-YYYY HH:mm:ss'; // Define the format variable
 
-app.post('/analyzeData', async (req, res) => {
+router.get('/',(req,res)=>{
+    res.send('Server is running.. ');
+})
+
+router.post('/api/analyzeData', async (req, res) => {
     try {
         const totalData = 30;
         const sliceData = totalData / 2;
@@ -181,10 +187,12 @@ app.post('/analyzeData', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+router.listen(port, () => {
     console.log(`Data analysis server is running at http://localhost:${port}`);
 });
 
+app.use('/.netlify/function/api', router);
+module.exports.handler=serverless(app);
 function parseDateStringToDate(dateString) {
     const originalDate = moment(dateString, 'YYYY-MM-DD HH:mm');
     const formattedDateString = originalDate.format(format);
