@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "netlify deploy --prod",
-    "test": "npm run test",
-    "start": "npm-run-all --parallel prodScript1",
-    "prodScript1": "npx pm2 start ./src/dataAnalysis.js",
-    "prodScript2": "node ./src/nseIndia.js"
+  "build": "netlify-lambda build src",
+  "start": "npm-run-all --parallel prodScript1",
+  "prodScript1": "netlify-lambda serve ./src/dataAnalysis.js",
+  "prodScript2": "netlify-lambda serve ./src/nseIndia.js",
+  "test": "npm run test"
   },
   "author": "",
   "license": "ISC",

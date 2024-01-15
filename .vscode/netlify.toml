@@ -1,2 +1,7 @@
 [build]
-   functions="src"
+  command = "npm run build"
+  functions = "src"
+  publish = "public"
+
+[dev]
+  command = "npm start"
