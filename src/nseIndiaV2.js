@@ -12,13 +12,13 @@ const mongooseOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     bufferCommands: false,
-    bufferTimeoutMS: 5000
+    bufferTimeoutMS: 500000
 };
 
 // Use async/await to ensure the connection is established
 (async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI, mongooseOptions);
+        await mongoose.connect("mongodb+srv://akash9936:Tree9936@cluster0.f1wthph.mongodb.net/?retryWrites=true&w=majority", mongooseOptions);
         console.log('Connected to MongoDB');
         console.log('NseIndiaV2 Started');
         // Set up the interval after the connection is established
@@ -66,7 +66,7 @@ const mongooseOptions = {
             } catch (error) {
                 console.error('Error fetching or inserting data:', error.message);
             }
-        }, 6000);
+        }, 60000);
 
         // Set up the Express server
         app.use(cors());

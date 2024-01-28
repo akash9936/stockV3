@@ -39,7 +39,7 @@ function fetchData() {
                     console.log(`[${new Date().toISOString()}] Received 401 Unauthorized error. Retrying after 1 second...`);
                     setTimeout(() => {
                         fetchData().then(resolve).catch(reject); // Retry after 1 second
-                    }, 1000);
+                    }, 10000);
                 } else {
                     reject(error);
                 }
