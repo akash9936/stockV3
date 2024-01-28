@@ -23,7 +23,8 @@ const mongooseOptions = {
         console.log('NseIndiaV2 Started');
         // Set up the interval after the connection is established
         setInterval(async () => {
-            try {
+            try 
+            {
                 const data = await fetchData();
 
                 if (data) {
@@ -57,9 +58,9 @@ const mongooseOptions = {
                             chartTodayPath: stock.chartTodayPath
                         }))
                     };
-
+                    console.log('Before inserted into MongoDB.'+simplifiedData);
                   await NSE50DataV2.collection.insertOne(simplifiedData);
-                    console.log('Data inserted into MongoDB.');
+                    console.log('After inserted into MongoDB.'+simplifiedData);
                 } else {
                     console.error('Error: Data is not available.');
                 }
