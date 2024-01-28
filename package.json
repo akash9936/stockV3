@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     
-    "start": "npm-run-all --parallel prodScript4",
+    "start": "npm run prodScript4",
     "prodScript1": "node ./src/dataAnalysisV2.js",
     "prodScript2": "node ./src/nseIndia.js",
     "prodScript3": "node ./src/fetchDataFromGoogleFianance.js",
