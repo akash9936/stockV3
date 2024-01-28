@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const NSE50DataV2 = require('./models/NSE50DataV2');
 const app = express();
 dotenv.config();
-const port = 4000;
+const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -72,7 +72,7 @@ const mongooseOptions = {
         app.use(cors());
 
         app.get('/getNseIndia', (req, res) => {
-            res.json({ message: 'Fetching data from NSE India' });
+            res.json({ message: 'Fetching data from NSE India Nifty 50' });
         });
 
         app.listen(port, () => {
