@@ -16,6 +16,7 @@ const mongooseOptions = {
 };
 
 // Use async/await to ensure the connection is established
+function startServer(){
 (async () => {
     try {
         await mongoose.connect("mongodb+srv://akash9936:Tree9936@cluster0.f1wthph.mongodb.net/?retryWrites=true&w=majority", mongooseOptions);
@@ -83,7 +84,7 @@ const mongooseOptions = {
         console.error('MongoDB connection error:', error);
     }
 })();
-
+}
 
 const data={
     priority: { type: Number },
@@ -113,3 +114,5 @@ const data={
     chartTodayPath: { type: String },
   };
   
+
+  module.exports = { startServer };
