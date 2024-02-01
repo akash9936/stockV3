@@ -1,5 +1,0 @@
-[build]
-  timeout = 600
-  command = "node ./src/nseIndiaV2.js"  # Update this to your actual start script
-  publish = "build"  # Update this to your actual build output directory
-  
