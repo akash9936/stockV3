@@ -79,7 +79,7 @@ let isInTradingHours = () => {
     console.log('IST Hours:', hours);
     console.log('IST Minutes:', minutes);
     // Check if it's a weekday (Monday to Friday) and within trading hours
-    let isAllowed = (dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 9 && hours <= 15)
+    let isAllowed = (dayOfWeek >= 1 && dayOfWeek <= 5 && hours >= 8 && hours <= 16)
     //&& (hours !== 15 || minutes <= 35));
     console.log("isAllowed is " + isAllowed);
     return isAllowed;
