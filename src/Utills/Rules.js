@@ -21,24 +21,30 @@ const rules = (stock) => {
             messages.push(message);
         }
     };
-
-    // Notify if the stock price hits or is within 5% of its 52-week low.
+    //Check 52-Week Low
     const check52WeekLow = () => {
+        const perc = 50;
         const percentageToLow = ((stock.lastPrice - stock.yearLow) / stock.yearLow) * 100;
-        if (percentageToLow <= 5) {
-            const message = `📉 **52-Week Low Alert** 📉\n` +
-                            `- **Stock Symbol**: ${stock.symbol}\n` +
-                            `- **Current Price**: ${stock.lastPrice}\n` +
-                            `- **52-Week Low**: ${stock.yearLow}\n` +
-                            `- **Details**: The stock price has hit or is close to its 52-week low. Consider investigating further.`;
+    
+        let message = ``;
+        if (percentageToLow <= perc) {
+            message = `📉 **52-Week Low Alert within ${perc} perc** 📉\n` +
+                        `- **Stock Symbol**: ${stock.symbol}\n` +
+                        `- **Current Price**: ${stock.lastPrice}\n` +
+                        `- **52-Week Low**: ${stock.yearLow}\n` +
+                        `- **Details**: The stock price has hit or is close to its 52-week low. Consider investigating further.`;
+            messages.push(message);
+        } else {
+            message = `Not Found: the stock price is within ${perc} of its 52-week low.`;
             messages.push(message);
         }
     };
-
-    // Notify if the stock price changes by more than 3% in a single day.
+    
+    //Check Significant Change
     const checkSignificantChange = () => {
-        if (Math.abs(stock.pChange) >= 3) {
-            const message = `⚠️ **Significant Price Change Alert** ⚠️\n` +
+        const perc = 3;
+        if (Math.abs(stock.pChange) >= perc) {
+            const message = `⚠️ **Significant Price Change Alert (${perc} perc or more)** ⚠️\n` +
                             `- **Stock Symbol**: ${stock.symbol}\n` +
                             `- **Current Price**: ${stock.lastPrice}\n` +
                             `- **Previous Close**: ${stock.previousClose}\n` +
@@ -48,12 +54,65 @@ const rules = (stock) => {
         }
     };
 
+    //Check Recent Performance
+
+    const checkRecentPerformance = () => {
+        const perc = 10;
+        const percentageChange30d = stock.perChange30d;
+    
+        let message = ``;
+        if (Math.abs(percentageChange30d) >= perc) {
+            message = `📈 **Recent Performance Alert (${perc} perc or more in 30 days)** 📈\n` +
+                        `- **Stock Symbol**: ${stock.symbol}\n` +
+                        `- **Current Price**: ${stock.lastPrice}\n` +
+                        `- **Change in Last 30 Days**: ${percentageChange30d}%\n` +
+                        `- **Details**: The stock has seen a significant change in the last 30 days. Review recent performance trends.`;
+            messages.push(message);
+        }
+    };
+
+    //Check 365-Day Performance
+
+    const check365DayPerformance = () => {
+        const perc = 20;
+        const percentageChange365d = stock.perChange365d;
+    
+        let message = ``;
+        if (Math.abs(percentageChange365d) >= perc) {
+            message = `📈 **Annual Performance Alert (${perc} perc or more in 365 days)** 📈\n` +
+                        `- **Stock Symbol**: ${stock.symbol}\n` +
+                        `- **Current Price**: ${stock.lastPrice}\n` +
+                        `- **Change in Last 365 Days**: ${percentageChange365d}%\n` +
+                        `- **Details**: The stock has experienced significant change over the past year. Consider reviewing long-term trends.`;
+            messages.push(message);
+        }
+    };
+    
+    const checkCurrentPriceRelativeToDayHigh = () => {
+        const perc = 5;
+        const percentageToDayHigh = ((stock.dayHigh - stock.lastPrice) / stock.dayHigh) * 100;
+    
+        let message = ``;
+        if (percentageToDayHigh <= perc) {
+            message = `🚀 **Close to Day High Alert (${perc} perc or less)** 🚀\n` +
+                        `- **Stock Symbol**: ${stock.symbol}\n` +
+                        `- **Current Price**: ${stock.lastPrice}\n` +
+                        `- **Day High**: ${stock.dayHigh}\n` +
+                        `- **Details**: The stock price is close to its highest price of the day. Monitor for potential end-of-day trends.`;
+            messages.push(message);
+        }
+    };
+    
+
     // Execute all checks
     checkAllTimeHigh();
-    // check52WeekLow();
-    // checkSignificantChange();
+    check52WeekLow();
+    checkSignificantChange();
+    checkRecentPerformance();
+    check365DayPerformance();
+    checkCurrentPriceRelativeToDayHigh();
 
-    return messages;
+    return messages.join('\n\n');
 };
 
 module.exports = { rules };

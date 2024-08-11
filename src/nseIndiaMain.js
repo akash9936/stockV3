@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const NSE50DataV2 = require('./models/NSE50DataV2');
 const { Mapper } = require('./Utills/Mappper');
 const {TeleGramBot} =require('./TeleGramBot')
+const { isInTradingHours } = require('./Utills/checkMarketOpen')
+
 const app = express();
 dotenv.config();
 const fetchDataCronTime=60000;
@@ -23,14 +25,23 @@ const mongooseOptions = {
 function startServer(){
 (async () => {
     try {
-        await mongoose.connect("mongodb+srv://akash9936:Tree9936@cluster0.f1wthph.mongodb.net/?retryWrites=true&w=majority", mongooseOptions);
-        console.log('Connected to MongoDB');
-        console.log('NseIndiaV2 Started');
+        const mongoUri = process.env.MONGODB_URI;
+        if (!mongoUri) {
+            throw new Error('MONGO_URI is not defined in .env file');
+        }
+        await mongoose.connect(mongoUri, mongooseOptions);        console.log('Connected to MongoDB');
+        console.log('NseIndiaMain Started');
         // Set up the interval after the connection is established
         setInterval(async () => {
             try 
             {
-               // const data = await fetchData();
+             //   const data = await fetchData();
+             let marketOpen=isInTradingHours();
+             if(!marketOpen){
+                 console.log(`Market is not open`);
+                 return;
+             }
+
                 const data = await fetchDataTest();
              //   console.log(`Data: ${JSON.stringify(data)}`);
                 if (data) {
@@ -38,8 +49,8 @@ function startServer(){
                     const simplifiedData=Mapper.dataMapper(data);
                    
                     TeleGramBot(simplifiedData);
-                //  await NSE50DataV2.collection.insertOne(simplifiedData);
-                //    console.log('After inserted into MongoDB.'+simplifiedData);
+                 await NSE50DataV2.collection.insertOne(simplifiedData);
+                   console.log('inserted into MongoDB.');
                 } else {
                     console.error('Error: Data is not available.');
                 }
