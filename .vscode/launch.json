@@ -5,7 +5,7 @@
         "type": "node",
         "request": "launch",
         "name": "Run Server",
-        "program": "${workspaceFolder}/src/dataAnalysis.js",
+        "program": "${workspaceFolder}/src/dataAnalysisV2.js.js",
         "console": "integratedTerminal",
         "restart": true,
         "timeout": 30000
