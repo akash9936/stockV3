@@ -7,12 +7,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const NSE50DataV2 = require('./models/NSE50DataV2');
 const { Mapper } = require('./Utills/Mappper');
-const {TeleGramBot} =require('./TeleGramBot')
+const { TeleGramBot } = require('./TeleGramBot')
 const { isInTradingHours } = require('./Utills/checkMarketOpen')
 
 const app = express();
 dotenv.config();
-const fetchDataCronTime=60000;
+const fetchDataCronTime = 60000;
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
@@ -22,60 +22,59 @@ const mongooseOptions = {
 };
 
 // Use async/await to ensure the connection is established
-function startServer(){
-(async () => {
-    try {
-        const mongoUri = process.env.MONGODB_URI;
-        if (!mongoUri) {
-            throw new Error('MONGO_URI is not defined in .env file');
-        }
-        await mongoose.connect(mongoUri, mongooseOptions);        console.log('Connected to MongoDB');
-        console.log('NseIndiaMain Started');
-        // Set up the interval after the connection is established
-        setInterval(async () => {
-            try 
-            {
-             //   const data = await fetchData();
-             let marketOpen=isInTradingHours();
-             if(!marketOpen){
-                 console.log(`Market is not open`);
-                 return;
-             }
-
-                const data = await fetchDataTest();
-             //   console.log(`Data: ${JSON.stringify(data)}`);
-                if (data) {
-
-                    const simplifiedData=Mapper.dataMapper(data);
-                   
-                    TeleGramBot(simplifiedData);
-                 await NSE50DataV2.collection.insertOne(simplifiedData);
-                   console.log('inserted into MongoDB.');
-                } else {
-                    console.error('Error: Data is not available.');
-                }
-            } catch (error) {
-                console.error('Error fetching or inserting data:', error.message);
+function startServer() {
+    (async () => {
+        try {
+            const mongoUri = process.env.MONGODB_URI;
+            if (!mongoUri) {
+                throw new Error('MONGO_URI is not defined in .env file');
             }
-        }, fetchDataCronTime);
+            await mongoose.connect(mongoUri, mongooseOptions); console.log('Connected to MongoDB');
+            console.log('NseIndiaMain Started');
+            // Set up the interval after the connection is established
+            setInterval(async () => {
+                try {
 
-        // Set up the Express server
-        app.use(cors());
+                    let marketOpen = isInTradingHours();
+                    if (!marketOpen) {
+                        console.log(`Market is not open`);
+                        return;
+                    }
+                    const data = await fetchData();
+                    // const data = await fetchDataTest();
+                    //   console.log(`Data: ${JSON.stringify(data)}`);
+                    if (data) {
 
-        app.get('/getNseIndia', (req, res) => {
-            res.json({ message: 'Fetching data from NSE India Nifty 50' });
-        });
+                        const simplifiedData = Mapper.dataMapper(data);
 
-        app.listen(port, () => {
-            console.log(`Server is running at http://localhost:${port}`);
-        });
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-    }
-})();
+                        TeleGramBot(simplifiedData);
+                        await NSE50DataV2.collection.insertOne(simplifiedData);
+                        console.log('inserted into MongoDB.');
+                    } else {
+                        console.error('Error: Data is not available.');
+                    }
+                } catch (error) {
+                    console.error('Error fetching or inserting data:', error.message);
+                }
+            }, fetchDataCronTime);
+
+            // Set up the Express server
+            app.use(cors());
+
+            app.get('/getNseIndia', (req, res) => {
+                res.json({ message: 'Fetching data from NSE India Nifty 50' });
+            });
+
+            app.listen(port, () => {
+                console.log(`Server is running at http://localhost:${port}`);
+            });
+        } catch (error) {
+            console.error('MongoDB connection error:', error);
+        }
+    })();
 }
 
-const data={
+const data = {
     priority: { type: Number },
     symbol: { type: String },
     identifier: { type: String },
@@ -101,7 +100,7 @@ const data={
     perChange30d: { type: Number },
     chart30dPath: { type: String },
     chartTodayPath: { type: String },
-  };
-  
+};
 
-  module.exports = { startServer };
+
+module.exports = { startServer };
