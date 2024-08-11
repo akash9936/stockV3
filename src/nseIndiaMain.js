@@ -8,7 +8,11 @@ const dotenv = require('dotenv');
 const NSE50DataV2 = require('./models/NSE50DataV2');
 const { Mapper } = require('./Utills/Mappper');
 const { TeleGramBot } = require('./TeleGramBot')
+const { evaluateRules } = require('./ProcessRules')
+const { insertSampleData } = require('./Utills/InsertRules');
 const { isInTradingHours } = require('./Utills/checkMarketOpen')
+const { createAlertMessages } = require('./Utills/CreateAlertMessage')
+
 
 const app = express();
 dotenv.config();
@@ -41,14 +45,23 @@ function startServer() {
                         return;
                     }
                     const data = await fetchData();
-                    // const data = await fetchDataTest();
+                    //  const data = await fetchDataTest();
+                    // await insertSampleData();
                     //   console.log(`Data: ${JSON.stringify(data)}`);
                     if (data) {
 
-                        const simplifiedData = Mapper.dataMapper(data);
+                       let simplifiedData = Mapper.dataMapper(data);
 
-                        TeleGramBot(simplifiedData);
-                        await NSE50DataV2.collection.insertOne(simplifiedData);
+                       let evaluateRuless=await evaluateRules(simplifiedData);
+                       const trueData = evaluateRuless.filter(data => data.evaluateResult);
+                    //    console.log('trueData into MongoDB.', trueData);
+
+                    let alertMessages = await createAlertMessages(trueData);
+                    // console.log('alertMessages into MongoDB.',alertMessages);
+
+
+                       await TeleGramBot(alertMessages);
+                        // await NSE50DataV2.collection.insertOne(simplifiedData);
                         console.log('inserted into MongoDB.');
                     } else {
                         console.error('Error: Data is not available.');
@@ -73,34 +86,6 @@ function startServer() {
         }
     })();
 }
-
-const data = {
-    priority: { type: Number },
-    symbol: { type: String },
-    identifier: { type: String },
-    open: { type: Number },
-    dayHigh: { type: Number },
-    dayLow: { type: Number },
-    lastPrice: { type: Number },
-    previousClose: { type: Number },
-    change: { type: Number },
-    pChange: { type: Number },
-    ffmc: { type: Number },
-    yearHigh: { type: Number },
-    yearLow: { type: Number },
-    totalTradedVolume: { type: Number },
-    totalTradedValue: { type: Number },
-    lastUpdateTime: { type: String },
-    nearWKH: { type: Number },
-    nearWKL: { type: Number },
-    perChange365d: { type: Number },
-    date365dAgo: { type: String },
-    chart365dPath: { type: String },
-    date30dAgo: { type: String },
-    perChange30d: { type: Number },
-    chart30dPath: { type: String },
-    chartTodayPath: { type: String },
-};
 
 
 module.exports = { startServer };
