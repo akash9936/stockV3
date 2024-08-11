@@ -2,11 +2,15 @@
 const express = require('express');
 const cors = require('cors');
 const fetchData = require('./getNSEIndiaData');
+const fetchDataTest = require('./TestData/TestData');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const NSE50DataV2 = require('./models/NSE50DataV2');
+const { Mapper } = require('./Utills/Mappper');
+const {TeleGramBot} =require('./TeleGramBot')
 const app = express();
 dotenv.config();
+const fetchDataCronTime=60000;
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
@@ -26,49 +30,23 @@ function startServer(){
         setInterval(async () => {
             try 
             {
-                const data = await fetchData();
-
+               // const data = await fetchData();
+                const data = await fetchDataTest();
+             //   console.log(`Data: ${JSON.stringify(data)}`);
                 if (data) {
-                    const simplifiedData = {
-                        timestamp: data.timestamp,
-                        data: data.data.map(stock => ({
-                            priority: stock.priority,
-                            symbol: stock.symbol,
-                            identifier: stock.identifier,
-                            open: stock.open,
-                            dayHigh: stock.dayHigh,
-                            dayLow: stock.dayLow,
-                            lastPrice: stock.lastPrice,
-                            previousClose: stock.previousClose,
-                            change: stock.change,
-                            pChange: stock.pChange,
-                            ffmc: stock.ffmc,
-                            yearHigh: stock.yearHigh,
-                            yearLow: stock.yearLow,
-                            totalTradedVolume: stock.totalTradedVolume,
-                            totalTradedValue: stock.totalTradedValue,
-                            lastUpdateTime: stock.lastUpdateTime,
-                            nearWKH: stock.nearWKH,
-                            nearWKL: stock.nearWKL,
-                            perChange365d: stock.perChange365d,
-                            date365dAgo: stock.date365dAgo,
-                            chart365dPath: stock.chart365dPath,
-                            date30dAgo: stock.date30dAgo,
-                            perChange30d: stock.perChange30d,
-                            chart30dPath: stock.chart30dPath,
-                            chartTodayPath: stock.chartTodayPath
-                        }))
-                    };
-                    console.log('Before inserted into MongoDB.'+simplifiedData);
-                  await NSE50DataV2.collection.insertOne(simplifiedData);
-                    console.log('After inserted into MongoDB.'+simplifiedData);
+
+                    const simplifiedData=Mapper.dataMapper(data);
+                   
+                    TeleGramBot(simplifiedData);
+                //  await NSE50DataV2.collection.insertOne(simplifiedData);
+                //    console.log('After inserted into MongoDB.'+simplifiedData);
                 } else {
                     console.error('Error: Data is not available.');
                 }
             } catch (error) {
                 console.error('Error fetching or inserting data:', error.message);
             }
-        }, 60000);
+        }, fetchDataCronTime);
 
         // Set up the Express server
         app.use(cors());

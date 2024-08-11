@@ -25,7 +25,7 @@ function fetchData() {
                 'sec-fetch-site': 'same-origin',
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
             },
-            timeout:300000
+            timeout:3000
         };
 
        await axios.request(config)
@@ -40,12 +40,13 @@ function fetchData() {
                     console.log(`[${new Date().toISOString()}] Received 401 Unauthorized error. Retrying after 1 second...`);
                     setTimeout(() => {
                         fetchData().then(resolve).catch(reject); // Retry after 1 second
-                    }, 10000);
+                    }, 1000);
                 } else {
                     reject(error);
                 }
             });
     });
 }
+
 
 module.exports = fetchData;
