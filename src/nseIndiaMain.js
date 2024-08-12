@@ -16,7 +16,7 @@ const { createAlertMessages } = require('./Utills/CreateAlertMessage')
 
 const app = express();
 dotenv.config();
-const fetchDataCronTime = 6000;
+const fetchDataCronTime = 60000;
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
@@ -39,14 +39,14 @@ function startServer() {
             setInterval(async () => {
                 try {
 
-                    // let marketOpen = isInTradingHours();
-                    // if (!marketOpen) {
-                    //     console.log(`Market is not open`);
-                    //     return;
-                    // }
+                    let marketOpen = isInTradingHours();
+                    if (!marketOpen) {
+                        console.log(`Market is not open`);
+                        return;
+                    }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
-                    // await insertSampleData();
+                    // await insertSampleData(); //For Rules
                     //   console.log(`Data: ${JSON.stringify(data)}`);
                     if (data) {
 
@@ -61,7 +61,7 @@ function startServer() {
 
 
                        await TeleGramBot(alertMessages);
-                        // await NSE50DataV2.collection.insertOne(simplifiedData);
+                        await NSE50DataV2.collection.insertOne(simplifiedData);
                         console.log('inserted into MongoDB.');
                     } else {
                         console.error('Error: Data is not available.');

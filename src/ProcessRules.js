@@ -4,7 +4,7 @@ const Rule = require('./models/RulesModel');
 // Function to evaluate a single rule
 const evaluateRule = (rule, stock) => {
     let { formula, compareWithValue, comparisonOperator } = rule.metadata;
-    compareWithValue=2;
+    // compareWithValue=2;
   
     // Assuming stock is an array with one object
     const stockData = stock; // Access the first element in the data array

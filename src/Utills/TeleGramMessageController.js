@@ -1,4 +1,4 @@
-const TELEGRAM_MESSAGE_LIMIT = 500;
+const TELEGRAM_MESSAGE_LIMIT = 1000;
 const MAX_ALLOWED_PARTS = 2; // Maximum number of allowed parts
 
 // Function to split a message into parts based on length and part limit

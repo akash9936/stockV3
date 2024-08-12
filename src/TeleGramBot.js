@@ -32,7 +32,7 @@ const TeleGramBot = (dataArray) => {
 
         // Log the incoming data for debugging
         // console.log('Received data:', dataArray);
-         console.log('dataArray Messages 1:', dataArray);
+        //  console.log('dataArray Messages 1:', dataArray);
 
         // Iterate through each object in the data array
         // dataArray.forEach(data => {
@@ -51,10 +51,10 @@ const TeleGramBot = (dataArray) => {
         // sendMessage(combinedMessages);
 
         //send message in parts
-        console.error('combinedMessages data fetched or data is',combinedMessages);
+        // console.error('combinedMessages data fetched or data is',combinedMessages);
 
         const messageParts = getMessageInParts(combinedMessages);
-        console.error('messageParts data fetched or data is',messageParts);
+        // console.error('messageParts data fetched or data is',messageParts);
 
         // Send each part individually
         messageParts.forEach(part => sendMessage(part));
