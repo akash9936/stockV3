@@ -13,18 +13,19 @@ const createAlertMessages = (ruleResults) => {
         const rule = result.rule;
 
         if (rule && rule.alertMessage) {
-            const header = rule.header || '📉 **Alert** 📉';
-            const stockMessage = rule.alertMessage
-                .replace('{perc}', rule.metadata.compareWithValue)
-                .replace('{symbol}', stockData.symbol || 'N/A') // Fallback value
-                .replace('{lastPrice}', stockData.lastPrice || 'N/A') // Fallback value
-                .replace('{yearHigh}', stockData.yearHigh || 'N/A')
-                .replace('{yearLow}', stockData.yearLow || 'N/A'); // Fallback value
+            const header = rule.header
+                .replace('{perc}', rule.metadata.compareWithValue);
+            
+            const stockDetails = 
+                `- **Stock Symbol**: ${stockData.symbol || 'N/A'}\n` +
+                `- **Current Price**: ${stockData.lastPrice || 'N/A'}\n` +
+                `- **52-Week High**: ${stockData.yearHigh || 'N/A'}\n` +
+                `- **52-Week Low**: ${stockData.yearLow || 'N/A'}\n`;
 
             if (!messages[header]) {
                 messages[header] = [];
             }
-            messages[header].push(stockMessage);
+            messages[header].push(stockDetails);
         }
     });
 
