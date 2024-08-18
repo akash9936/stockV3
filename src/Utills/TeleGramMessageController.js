@@ -1,5 +1,5 @@
 const TELEGRAM_MESSAGE_LIMIT = 1000;
-const MAX_ALLOWED_PARTS = 2; // Maximum number of allowed parts
+const MAX_ALLOWED_PARTS = 10; // Maximum number of allowed parts
 
 // Function to split a message into parts based on length and part limit
 const splitMessage = (message, limit) => {
@@ -15,7 +15,10 @@ const splitMessage = (message, limit) => {
     };
 
     // Split the message by lines and build parts
-    message.split('\n').forEach(line => {
+    // Split the message by lines and build parts
+    const lines = message.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
         // Check if adding the current line exceeds the limit
         if ((currentPart + line + '\n').length > limit) {
             // If the number of parts is not yet at the limit, add the current part and start a new one
@@ -24,12 +27,13 @@ const splitMessage = (message, limit) => {
                 currentPart = line + '\n';
             } else {
                 // If the maximum number of parts is reached, discard the rest of the message
-                return;
+                console.warn('Message exceeds the limit and some parts were discarded.');
+                break;
             }
         } else {
             currentPart += line + '\n';
         }
-    });
+    }
 
     // Add the last part if it's within the limit and the maximum number of parts is not exceeded
     if (parts.length < MAX_ALLOWED_PARTS && currentPart.trim().length > 0) {

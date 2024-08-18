@@ -5,21 +5,43 @@ const Rule = require('./../models/RulesModel'); // Ensure the path is correct
 async function insertSampleData() {
   try {
     // Define the sample rule data
+    // const sampleRule = new Rule({
+    //   ruleId: '1',
+    //   header: 'All-Time High Alert',
+    //   description: 'Alert when the stock price is within a certain percentage of its all-time high.',
+    //   frequency: 60,
+    //   lastExecuted: null,
+    //   dataPoints: ['lastPrice', 'yearHigh'],
+    //   alertMessage: '🚨 **All-Time High Alert within {perc}%** 🚨\n- **Stock Symbol**: {symbol}\n- **Current Price**: {lastPrice}\n- **All-Time High**: {yearHigh}\n- **Details**: The stock price is close to its all-time high. Consider reviewing its performance.',
+    //   stockExchange: ['NSE50'],
+    //   EnableForUI: true,
+    //   EnableTeleGram: true,
+    //   isActive: true,
+    //   CronValue: '',
+    //   metadata: {
+    //     formula: '(yearHigh - lastPrice) / yearHigh * 100', // Ensure this formula is valid for your use case
+    //     compareWithValue: 5,
+    //     comparisonOperator: '<=' // Ensure this operator is valid for your use case
+    //   },
+    //   createdBy: 'system',
+    //   createdAt: new Date(),
+    //   updatedAt: new Date()
+    // });
     const sampleRule = new Rule({
-      ruleId: '1',
-      header: 'All-Time High Alert',
-      description: 'Alert when the stock price is within a certain percentage of its all-time high.',
+      ruleId: '2',
+      header: 'All-Time Low Alert',
+      description: 'Alert when the stock price is within a certain percentage of its all-time low.',
       frequency: 60,
       lastExecuted: null,
-      dataPoints: ['lastPrice', 'yearHigh'],
-      alertMessage: '🚨 **All-Time High Alert within {perc}%** 🚨\n- **Stock Symbol**: {symbol}\n- **Current Price**: {lastPrice}\n- **All-Time High**: {yearHigh}\n- **Details**: The stock price is close to its all-time high. Consider reviewing its performance.',
+      dataPoints: ['lastPrice', 'yearLow'],
+      alertMessage: '📉 **All-Time Low Alert within {perc}%** 📉\n- **Stock Symbol**: {symbol}\n- **Current Price**: {lastPrice}\n- **All-Time Low**: {yearLow}\n- **Details**: The stock price is close to its all-time low. Consider reviewing its performance.',
       stockExchange: ['NSE50'],
       EnableForUI: true,
       EnableTeleGram: true,
       isActive: true,
       CronValue: '',
       metadata: {
-        formula: '(yearHigh - lastPrice) / yearHigh * 100', // Ensure this formula is valid for your use case
+        formula: '(lastPrice - yearLow) / yearLow * 100', // Ensure this formula is valid for your use case
         compareWithValue: 5,
         comparisonOperator: '<=' // Ensure this operator is valid for your use case
       },

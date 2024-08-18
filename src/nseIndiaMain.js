@@ -43,7 +43,7 @@ function startServer() {
                     if (!marketOpen) {
                         console.log(`Market is not open`);
                         return;
-                    }
+                   }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
