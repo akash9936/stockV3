@@ -28,4 +28,4 @@ jobs:
 
       - name: Run script
         run: |
-          node ./src/nseIndiaMain.js  # Your script to send notifications
+          npm start  # Your script to send notifications
