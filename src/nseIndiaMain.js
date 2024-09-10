@@ -1,4 +1,4 @@
-// nseIndia.js
+// nseIndiaMain.js
 const express = require('express');
 const cors = require('cors');
 const fetchData = require('./getNSEIndiaData');
@@ -16,7 +16,7 @@ const { createAlertMessages } = require('./Utills/CreateAlertMessage')
 
 const app = express();
 dotenv.config();
-const fetchDataCronTime = 30000;
+const fetchDataCronTime = 3000;
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
