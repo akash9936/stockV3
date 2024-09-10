@@ -47,7 +47,7 @@ function startServer() {
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
-                    //   console.log(`Data: ${JSON.stringify(data)}`);
+                      console.log(`Data: ${JSON.stringify(data)}`);
                     if (data) {
 
                        let simplifiedData = Mapper.dataMapper(data);
