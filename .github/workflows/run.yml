@@ -1,0 +1,20 @@
+name: Scheduled Notification
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'  # Runs every minute
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run a script
+        run: echo "Running scheduled job"
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run script
+        run: |
+          node ./src/nseIndiaMain.js  # Your script to send notifications
