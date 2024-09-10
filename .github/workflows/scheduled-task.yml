@@ -1,4 +1,4 @@
-name: Scheduled Notification
+name: scheduled
 
 on:
   schedule:
