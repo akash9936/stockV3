@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Run a script
+        run: echo "Running scheduled job"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
