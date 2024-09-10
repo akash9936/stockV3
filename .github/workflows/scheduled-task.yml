@@ -1,8 +1,11 @@
 name: scheduled
 
 on:
-  schedule:
-    - cron: '*/1 * * * *'  # Runs every minute
+  # schedule:
+  #   - cron: '*/1 * * * *'  # Runs every minute
+   push:  # This triggers the workflow on any push to the repository
+    branches:
+      - main 
 
 jobs:
   send-notification:
