@@ -1,4 +1,4 @@
 // startServer.js
-const { startServer } = require('./src/nseIndiaMain');
+const { startServer } = require('./src/serverLogic');
 
 startServer();
