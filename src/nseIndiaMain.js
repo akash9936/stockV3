@@ -16,7 +16,9 @@ const { createAlertMessages } = require('./Utills/CreateAlertMessage')
 
 const app = express();
 dotenv.config();
-const fetchDataCronTime = 30000;
+const fetchDataCronTime = 3600000;
+// const fetchDataCronTime = 6000;
+
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,
@@ -39,11 +41,11 @@ function startServer() {
             setInterval(async () => {
                 try {
 
-                //     let marketOpen = isInTradingHours();
-                //     if (!marketOpen) {
-                //         console.log(`Market is not open`);
-                //         return;
-                //    }
+                    let marketOpen = isInTradingHours();
+                    if (!marketOpen) {
+                        console.log(`Market is not open`);
+                        return;
+                   }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
