@@ -17,3 +17,5 @@ forever restart [index|script] -> Restart a specific process
 forever logs [index|script]
 forever --watch start startServer.js -> auto-restarts on file change
 forever start -c "node --inspect" startServer.js -> Run a script in the foreground (debugging)
+cat /home/toto/.forever/AJYC.log -> Read the logs
+tail -f /home/toto/.forever/AJYC.log -> get logs
