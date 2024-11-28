@@ -15,7 +15,7 @@ const evaluateRule = (rule, stock) => {
       return stockData[match] !== undefined ? stockData[match] : match;
     });
   
-    console.error('formulaWithStockData evaluating rules:', formulaWithStockData, "For Stock ",stockData.symbol);
+    // console.error('formulaWithStockData evaluating rules:', formulaWithStockData, "For Stock ",stockData.symbol);
     // console.error('stockData evaluating rules:', stockData);
   
     let result;

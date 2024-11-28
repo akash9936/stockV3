@@ -39,11 +39,11 @@ function startServer() {
             setInterval(async () => {
                 try {
 
-                //     let marketOpen = isInTradingHours();
-                //     if (!marketOpen) {
-                //         console.log(`Market is not open`);
-                //         return;
-                //    }
+                    let marketOpen = isInTradingHours();
+                    if (!marketOpen) {
+                        console.log(`Market is not open`);
+                        return;
+                   }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules

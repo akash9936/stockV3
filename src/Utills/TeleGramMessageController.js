@@ -1,12 +1,39 @@
-const TELEGRAM_MESSAGE_LIMIT = 1000;
-const MAX_ALLOWED_PARTS = 10; // Maximum number of allowed parts
+const axios = require('axios');
+require('dotenv').config();
 
-// Function to split a message into parts based on length and part limit
-const splitMessage = (message, limit) => {
+const TELEGRAM_MESSAGE_LIMIT = 4096; // Telegram's character limit for a single message
+const MAX_ALLOWED_PARTS = 10; // Maximum allowed message parts
+const token = process.env.TELEGRAM_BOT_TOKEN;
+const chatId = process.env.TELEGRAM_CHAT_ID;
+
+// Escape special Markdown characters
+const escapeMarkdown = (text) => {
+    return text
+        .replace(/_/g, '\\_')
+        .replace(/\*/g, '\\*')
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+        .replace(/~/g, '\\~')
+        .replace(/`/g, '\\`')
+        .replace(/>/g, '\\>')
+        .replace(/#/g, '\\#')
+        .replace(/\+/g, '\\+')
+        .replace(/-/g, '\\-')
+        .replace(/=/g, '\\=')
+        .replace(/\|/g, '\\|')
+        .replace(/{/g, '\\{')
+        .replace(/}/g, '\\}')
+        .replace(/\./g, '\\.')
+        .replace(/!/g, '\\!');
+};
+
+// Split the message into parts
+const getMessageInParts = (message, limit = TELEGRAM_MESSAGE_LIMIT) => {
     const parts = [];
     let currentPart = '';
 
-    // Helper function to add the current part to the parts array
     const addCurrentPart = () => {
         if (currentPart.trim().length > 0) {
             parts.push(currentPart.trim());
@@ -14,20 +41,15 @@ const splitMessage = (message, limit) => {
         currentPart = '';
     };
 
-    // Split the message by lines and build parts
-    // Split the message by lines and build parts
     const lines = message.split('\n');
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        // Check if adding the current line exceeds the limit
         if ((currentPart + line + '\n').length > limit) {
-            // If the number of parts is not yet at the limit, add the current part and start a new one
             if (parts.length < MAX_ALLOWED_PARTS) {
                 addCurrentPart();
                 currentPart = line + '\n';
             } else {
-                // If the maximum number of parts is reached, discard the rest of the message
-                console.warn('Message exceeds the limit and some parts were discarded.');
+                console.warn('Message exceeds the limit. Discarding excess content.');
                 break;
             }
         } else {
@@ -35,21 +57,8 @@ const splitMessage = (message, limit) => {
         }
     }
 
-    // Add the last part if it's within the limit and the maximum number of parts is not exceeded
     if (parts.length < MAX_ALLOWED_PARTS && currentPart.trim().length > 0) {
-        parts.push(currentPart.trim());
-    }
-
-    return parts;
-};
-
-// Function to get message parts considering the limit
-const getMessageInParts = (message) => {
-    const parts = splitMessage(message, TELEGRAM_MESSAGE_LIMIT);
-
-    // If there are no valid parts, return an empty array
-    if (parts.length === 0) {
-        console.warn('Message exceeds the limit and no parts were added.');
+        addCurrentPart();
     }
 
     return parts;

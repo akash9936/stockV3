@@ -5,12 +5,12 @@ npx pm2 delete all
 Last Updated running branch in QA: mainLiveV4
 
 
-Docker : stockbuildv1 is image name. 
+Docker : mainlive7 is image name. 
 Below is in order of if code changes are found
-docker build -t stockbuildv1 .  -> build your image
+docker build -t mainlive7 .  -> build your image
 docker stop <container-id> -> Stop a Running Container
 docker rm <container-id> -> Remove a Stopped Container
-docker run -p 3000:3000 stockbuildv1 -> start new container
+docker run -p 3000:3000 mainlive7 -> start new container
 
 docker ps -> Check Running Docker Containers
 docker ps -a -> List All Containers (Running + Stopped)
