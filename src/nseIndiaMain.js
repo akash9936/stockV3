@@ -41,10 +41,12 @@ function startServer() {
                         return;
                     }
                     const data = await fetchData();
+                    
                     // const data = await fetchDataTest();
                     //   console.log(`Data: ${JSON.stringify(data)}`);
                     if (data) {
 
+                        // console.log(`Data fetched at: ${new Date()}`);
                         const simplifiedData = Mapper.dataMapper(data);
 
                         TeleGramBot(simplifiedData);

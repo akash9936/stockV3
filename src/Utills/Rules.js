@@ -3,7 +3,7 @@ const rules = (stock) => {
 
     // Rule: Notify if the stock price is within 5% of its all-time high.
     const checkAllTimeHigh = () => {
-        const perc = 1;
+        const perc = 10;
         const percentageToHigh = ((stock.yearHigh - stock.lastPrice) / stock.yearHigh) * 100;
 
         if (percentageToHigh <= perc) {
