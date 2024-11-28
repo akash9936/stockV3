@@ -9,19 +9,21 @@ const chatId = process.env.TELEGRAM_CHAT_ID;
 
 const sendMessage = async (message) => {
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    let messageContent=message;
-    // console.log('Mapped Data:', messageContent);
+    const safeMessage = escapeMarkdown(message);
+
     try {
         const response = await axios.post(url, {
             chat_id: chatId,
-            text: messageContent,
-            parse_mode: 'Markdown'
+            text: safeMessage,
+            parse_mode: 'Markdown',
         });
-    //    console.log('Message sent:', response.data);
+        // console.log('Message sent:', response.data);
+        console.log('Message sent:', safeMessage);
     } catch (error) {
         console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
 };
+
 
 const TeleGramBot = async (data) => {
     if (data && data.data && Array.isArray(data.data)) {
@@ -59,8 +61,20 @@ const TeleGramBot = async (data) => {
 function splitMessage(message, maxLength = 4096) {
     const parts = [];
     while (message.length > 0) {
-        parts.push(message.slice(0, maxLength));
-        message = message.slice(maxLength);
+        let chunk = message.slice(0, maxLength);
+
+        // Ensure no Markdown entities are split
+        const lastBackslash = chunk.lastIndexOf('\\');
+        const lastAsterisk = chunk.lastIndexOf('*');
+        const lastUnderscore = chunk.lastIndexOf('_');
+        const lastValidSplit = Math.max(lastBackslash, lastAsterisk, lastUnderscore);
+
+        if (lastValidSplit > maxLength - 20) {
+            chunk = chunk.slice(0, lastValidSplit);
+        }
+
+        parts.push(chunk);
+        message = message.slice(chunk.length);
     }
     return parts;
 }
@@ -74,5 +88,28 @@ function splitMessage(message, maxLength = 4096) {
 //         await sendMessage(value);  // Added await to ensure messages are sent sequentially
 //     }
 // };
+
+const escapeMarkdown = (text) => {
+    return text
+        .replace(/_/g, '\\_')
+        .replace(/\*/g, '\\*')
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+        .replace(/~/g, '\\~')
+        .replace(/`/g, '\\`')
+        .replace(/>/g, '\\>')
+        .replace(/#/g, '\\#')
+        .replace(/\+/g, '\\+')
+        .replace(/-/g, '\\-')
+        .replace(/=/g, '\\=')
+        .replace(/\|/g, '\\|')
+        .replace(/{/g, '\\{')
+        .replace(/}/g, '\\}')
+        .replace(/\./g, '\\.')
+        .replace(/!/g, '\\!');
+};
+
 
 module.exports = { TeleGramBot };

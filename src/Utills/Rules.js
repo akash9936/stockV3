@@ -91,10 +91,10 @@ const rules = (stock) => {
 
     // Execute all checks
     checkAllTimeHigh();
-    // check52WeekLow();
-    // checkSignificantChange();
-    // checkRecentPerformance();
-    // check365DayPerformance();
+    check52WeekLow();
+    checkSignificantChange();
+    checkRecentPerformance();
+    check365DayPerformance();
     // checkCurrentPriceRelativeToDayHigh();
 
     // Combine messages and return only the first 4000 characters

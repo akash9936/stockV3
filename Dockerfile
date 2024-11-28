@@ -1,5 +1,7 @@
 # Use official Node.js image
-FROM node:18
+FROM node:20
+
+RUN apt-get update && apt-get install -y iputils-ping
 
 # Set the working directory in the container
 WORKDIR /
@@ -12,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 3002
 
 # Command to run the app
 CMD npm start
