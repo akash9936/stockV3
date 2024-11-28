@@ -5,8 +5,8 @@ require('dotenv').config();
 const TELEGRAM_MESSAGE_LIMIT = 500;
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID;
-console.log('token Data:', token);
-console.log(' chatId:', chatId);
+// console.log('token Data:', token);
+// console.log(' chatId:', chatId);
 
 const sendMessage = async (message) => {
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -18,7 +18,7 @@ const sendMessage = async (message) => {
             text: messageContent,
             parse_mode: 'Markdown'
         });
-       console.log('Message sent:', response.data);
+    //    console.log('Message sent:', response.data);
     } catch (error) {
         console.error('Error sending message:', error.response ? error.response.data : error.message);
     }

@@ -16,7 +16,7 @@ const { createAlertMessages } = require('./Utills/CreateAlertMessage')
 
 const app = express();
 dotenv.config();
-const fetchDataCronTime = 3000;
+const fetchDataCronTime = 30000;
 const port = 6000;
 const mongooseOptions = {
     useNewUrlParser: true,

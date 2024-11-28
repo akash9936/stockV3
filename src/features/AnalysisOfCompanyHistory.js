@@ -4,7 +4,7 @@ const cookieJar = new tough.CookieJar();
 let count = 1;
 
 const url = 'https://www.nseindia.com/api/corp-info?symbol=MAHEPC&corpType=financialResult&market=equities';
-    console.log("cookes are    ",cookieJar.getCookieStringSync('https://www.nseindia.com/get-quotes/equity'))
+    // console.log("cookes are    ",cookieJar.getCookieStringSync('https://www.nseindia.com/get-quotes/equity'))
 const headers = {
     'accept': '*/*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
@@ -25,7 +25,7 @@ const headers = {
 async function fetchDataForTopCorpInfo() {
     try {
         const response = await axios.get(url, { headers });
-        console.log('Data:', response.data);
+        // console.log('Data:', response.data);
     } catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
     }
