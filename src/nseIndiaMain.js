@@ -39,19 +39,19 @@ function startServer() {
             setInterval(async () => {
                 try {
 
-                //     let marketOpen = isInTradingHours();
-                //     if (!marketOpen) {
-                //         console.log(`Market is not open`);
-                //         return;
-                //    }
+                    let marketOpen = isInTradingHours();
+                    if (!marketOpen) {
+                        console.log(`Market is not open`);
+                        return;
+                   }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
-                    //   console.log(`Data: ${JSON.stringify(data)}`);
+                      console.log(`Data: ${JSON.stringify(data)}`);
                     if (data) {
 
                        let simplifiedData = Mapper.dataMapper(data);
-
+                       await NSE50DataV2.collection.insertOne(simplifiedData);
                        let evaluateRuless=await evaluateRules(simplifiedData);
                        const trueData = evaluateRuless.filter(data => data.evaluateResult);
                     //    console.log('trueData into MongoDB.', trueData);
@@ -61,7 +61,7 @@ function startServer() {
 
 
                        await TeleGramBot(alertMessages);
-                        await NSE50DataV2.collection.insertOne(simplifiedData);
+                        
                         console.log('inserted into MongoDB.');
                     } else {
                         console.error('Error: Data is not available.');
