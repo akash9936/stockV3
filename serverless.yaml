@@ -1,0 +1,26 @@
+service: nse-india-tracker
+frameworkVersion: '3'
+
+useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ap-south-1  # Change to your preferred region
+  memorySize: 512
+  timeout: 30
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+    TELEGRAM_BOT_TOKEN: ${env:TELEGRAM_BOT_TOKEN}
+    TELEGRAM_CHAT_ID: ${env:TELEGRAM_CHAT_ID}
+
+# functions:
+#   fetchData:
+#     handler: handlers.fetchDataHandler
+#     events:
+#       - schedule:
+#          # rate: cron(0 9,11,13,15 * * ? *)  # Adjust based on your fetchDataCronTime (30s) from 09 to 15
+#          rate: cron(0/10 * * * ? *)
+
+
+plugins:
+  - serverless-offline

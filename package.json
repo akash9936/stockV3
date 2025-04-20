@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node ./startServer.js",
+    // "start": "node ./startServer.js",
+    "start": "sls offline start",
+    "deploy": "sls deploy",
     "build": "webpack --mode production",
     "test": "npm run test"
   },
