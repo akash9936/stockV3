@@ -39,11 +39,11 @@ function startServer() {
             setInterval(async () => {
                 try {
 
-                    let marketOpen = isInTradingHours();
-                    if (!marketOpen) {
-                        console.log(`Market is not open`);
-                        return;
-                   }
+                //     let marketOpen = isInTradingHours();
+                //     if (!marketOpen) {
+                //         console.log(`Market is not open`);
+                //         return;
+                //    }
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
@@ -52,15 +52,15 @@ function startServer() {
 
                        let simplifiedData = Mapper.dataMapper(data);
 
-                       let evaluateRuless=await evaluateRules(simplifiedData);
-                       const trueData = evaluateRuless.filter(data => data.evaluateResult);
+                    //   let evaluateRuless=await evaluateRules(simplifiedData);
+                    //   const trueData = evaluateRuless.filter(data => data.evaluateResult);
                     //    console.log('trueData into MongoDB.', trueData);
 
-                    let alertMessages = await createAlertMessages(trueData);
+                   // let alertMessages = await createAlertMessages(trueData);
                     // console.log('alertMessages into MongoDB.',alertMessages);
 
 
-                       await TeleGramBot(alertMessages);
+                   //    await TeleGramBot(alertMessages);
                         await NSE50DataV2.collection.insertOne(simplifiedData);
                         console.log('inserted into MongoDB.');
                     } else {
