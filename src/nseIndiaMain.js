@@ -63,11 +63,19 @@ function startServer() {
 
                         // Uncomment to create and send alerts
                         // let alertMessages = await createAlertMessages(trueData);
-                        // console.log('alertMessages into MongoDB.',alertMessages);
+                        // console.log('simplifiedData into v.',simplifiedData);
                         // await TeleGramBot(alertMessages);
                         
-                        await NSE50DataV2.collection.insertOne(simplifiedData);
-                        console.log(`[${new Date().toISOString()}] Data inserted into MongoDB`);
+                        try {
+                            const insertResult = await NSE50DataV2.collection.insertOne(simplifiedData);
+                            if (insertResult.acknowledged && insertResult.insertedId) {
+                                console.log(`[${new Date().toISOString()}] ✅ MongoDB insert successful. Inserted ID: ${insertResult.insertedId}`);
+                            } else {
+                                console.error(`[${new Date().toISOString()}] ❌ MongoDB insert failed: No acknowledgment from server`);
+                            }
+                        } catch (insertError) {
+                            console.error(`[${new Date().toISOString()}] ❌ Error during MongoDB insert:`, insertError.message);
+                        }
                     } else {
                         console.error(`[${new Date().toISOString()}] Error: Data is not available.`);
                     }
