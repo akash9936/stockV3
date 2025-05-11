@@ -1,4 +1,3 @@
-// nseIndiaMain.js
 const express = require('express');
 const cors = require('cors');
 const fetchData = require('./getNSEIndiaData');
@@ -12,7 +11,6 @@ const { evaluateRules } = require('./ProcessRules')
 const { insertSampleData } = require('./Utills/InsertRules');
 const { isInTradingHours } = require('./Utills/checkMarketOpen')
 const { createAlertMessages } = require('./Utills/CreateAlertMessage')
-
 
 const app = express();
 dotenv.config();
@@ -31,45 +29,60 @@ function startServer() {
         try {
             const mongoUri = process.env.MONGODB_URI;
             if (!mongoUri) {
-                throw new Error('MONGO_URI is not defined in .env file');
+                throw new Error('MONGODB_URI is not defined in .env file');
             }
-            await mongoose.connect(mongoUri, mongooseOptions); console.log('Connected to MongoDB');
+            
+            console.log('Connecting to MongoDB...');
+            await mongoose.connect(mongoUri, mongooseOptions);
+            console.log('Connected to MongoDB');
             console.log('NseIndiaMain Started');
+            
             // Set up the interval after the connection is established
-            setInterval(async () => {
+            const intervalId = setInterval(async () => {
                 try {
-
-                //     let marketOpen = isInTradingHours();
-                //     if (!marketOpen) {
-                //         console.log(`Market is not open`);
-                //         return;
-                //    }
+                    // Uncomment to check if market is open
+                    // let marketOpen = isInTradingHours();
+                    // if (!marketOpen) {
+                    //     console.log(`Market is not open`);
+                    //     return;
+                    // }
+                    
+                    console.log(`[${new Date().toISOString()}] Fetching data from NSE...`);
                     const data = await fetchData();
                     // const data = await fetchDataTest();
                     // await insertSampleData(); //For Rules
-                    //   console.log(`Data: ${JSON.stringify(data)}`);
+                    
                     if (data) {
+                        console.log(`[${new Date().toISOString()}] Data received successfully`);
+                        let simplifiedData = Mapper.dataMapper(data);
 
-                       let simplifiedData = Mapper.dataMapper(data);
+                        // Uncomment to evaluate rules
+                        // let evaluateRuless = await evaluateRules(simplifiedData);
+                        // const trueData = evaluateRuless.filter(data => data.evaluateResult);
+                        // console.log('trueData into MongoDB.', trueData);
 
-                    //   let evaluateRuless=await evaluateRules(simplifiedData);
-                    //   const trueData = evaluateRuless.filter(data => data.evaluateResult);
-                    //    console.log('trueData into MongoDB.', trueData);
-
-                   // let alertMessages = await createAlertMessages(trueData);
-                    // console.log('alertMessages into MongoDB.',alertMessages);
-
-
-                   //    await TeleGramBot(alertMessages);
+                        // Uncomment to create and send alerts
+                        // let alertMessages = await createAlertMessages(trueData);
+                        // console.log('alertMessages into MongoDB.',alertMessages);
+                        // await TeleGramBot(alertMessages);
+                        
                         await NSE50DataV2.collection.insertOne(simplifiedData);
-                        console.log('inserted into MongoDB.');
+                        console.log(`[${new Date().toISOString()}] Data inserted into MongoDB`);
                     } else {
-                        console.error('Error: Data is not available.');
+                        console.error(`[${new Date().toISOString()}] Error: Data is not available.`);
                     }
                 } catch (error) {
-                    console.error('Error fetching or inserting data:', error.message);
+                    console.error(`[${new Date().toISOString()}] Error fetching or inserting data:`, error.message);
                 }
             }, fetchDataCronTime);
+
+            // Handle process termination to properly close connections
+            process.on('SIGINT', async () => {
+                clearInterval(intervalId);
+                await mongoose.connection.close();
+                console.log('MongoDB connection closed through app termination');
+                process.exit(0);
+            });
 
             // Set up the Express server
             app.use(cors());
@@ -83,9 +96,9 @@ function startServer() {
             });
         } catch (error) {
             console.error('MongoDB connection error:', error);
+            process.exit(1);
         }
     })();
 }
-
 
 module.exports = { startServer };
